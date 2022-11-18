@@ -10,3 +10,8 @@ export interface UserProps {
   name?: string;
   id?: number;
 }
+
+export interface RulesProp{
+  type:'required' | 'email' | 'password',
+  message:string
+}
