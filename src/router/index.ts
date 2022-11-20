@@ -13,6 +13,11 @@ const router = createRouter({
       name: "login",
       component: () => import("@/view/Login.vue"),
     },
+    {
+      path:'/column/:id',
+      name:'column',
+      component:()=>import('@/view/ColumnDetail.vue')
+    }
   ],
 });
 export default router;

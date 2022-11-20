@@ -8,13 +8,21 @@ export default defineConfig({
   plugins: [
     vue(),
     eslintPlugin({
-      include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"
-    ],
+      include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
     }),
   ],
   resolve: {
     alias: {
       "@": join(__dirname, "src"),
+    },
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://api.vikingship.xyz/api/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
     },
   },
 });

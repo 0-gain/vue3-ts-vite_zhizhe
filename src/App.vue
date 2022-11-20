@@ -2,7 +2,7 @@
   <div class="container-fluid px-0 flex-shrink-0">
     <GlobalHeader :user="userData"></GlobalHeader>
     <router-view></router-view>
-    <footer class="text-center py-4 text-secondary bg-light">
+    <footer class="text-center py-4 text-secondary bg-light mt-auto">
       <small>
         <ul class="list-inline mb-0">
           <li class="list-inline-item">© 2020 者也专栏</li>
