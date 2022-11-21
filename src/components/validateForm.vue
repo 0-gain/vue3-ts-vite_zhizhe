@@ -17,7 +17,6 @@ const emit = defineEmits(["on-submitForm"]);
 let funcArr: ValidateFunc[] = [];
 // 提交表单
 const submitForm = () => {
-  console.log(funcArr);
   const res = funcArr.map((func) => func()).every((res) => res);
   emit("on-submitForm", res);
 };

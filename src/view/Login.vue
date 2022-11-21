@@ -30,7 +30,9 @@
 <script setup lang="ts">
 import ValidateForm from "@/components/validateForm.vue";
 import ValidateInput from "@/components/validateInput.vue";
+import Message from "@/components/Message";
 import { RulesProp } from "@/types/interface";
+import { useStore } from "vuex";
 import { ref } from "vue";
 
 const emailVal = ref("");
@@ -47,8 +49,24 @@ const passwordRules: RulesProp[] = [
 ];
 
 // 提交表单
-const onSubmitForm = (res:boolean) => {
-  console.log(res)
+const store = useStore();
+const onSubmitForm = (validate: boolean) => {
+  if (!validate) {
+    return;
+  }
+  const payload = {
+    email: emailVal.value,
+    password: password.value,
+  };
+  store
+    .dispatch("LoginAndGetUserInfo", payload)
+    .then(() => {
+      Message({ type: "success", message: "登录成功 2秒后跳转首页" });
+    })
+    .catch((e) => {
+      console.log(e, "e");
+      Message({ type: "danger", message: e });
+    });
 };
 </script>
 <style scoped></style>

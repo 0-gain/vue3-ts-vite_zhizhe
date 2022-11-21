@@ -1,7 +1,11 @@
 export interface UserProps {
   isLogin: boolean;
-  name?: string;
-  id?: number;
+  nickName?: string;
+  _id?: string;
+  column?: string;
+  email?: string;
+  avatar?: ImageProps;
+  description?: string;
 }
 
 export interface RulesProp {
@@ -18,13 +22,23 @@ export interface ColumnProps {
   title: string;
   avatar?: ImageProps;
   description: string;
-  column?:string
+  column?: string;
 }
 interface ListProps<P> {
   [id: string]: P;
 }
 
+export interface GlobalError {
+  status: boolean;
+  message: string;
+}
 export interface GlobalDataProps {
+  token: string;
   columns: { data: ListProps<ColumnProps>; currentPage: number; total: number };
   posts: { data: ListProps<ColumnProps> };
+  isLoading: boolean;
+  user: UserProps;
+  error: GlobalError;
 }
+
+export type MessageType = "primary" | "success" | "danger" | "warning";

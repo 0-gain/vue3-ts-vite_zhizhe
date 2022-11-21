@@ -3,7 +3,7 @@
     <article class="card mb-3 shadow-sm" v-for="post in list" :key="post.id">
       <div class="card-body">
         <h4>
-          <router-link to="/">{{ post.title }}</router-link>
+          <router-link :to="{name:'posts',params:{id:post._id}}">{{ post.title }}</router-link>
         </h4>
         <div class="row my-3 align-items-center">
           <div class="col-4">

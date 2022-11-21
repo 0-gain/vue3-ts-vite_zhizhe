@@ -13,11 +13,7 @@
     </section>
     <h4 class="font-weight-bold text-center mb-4">发现精彩</h4>
     <ColumnList :list="columnData" />
-    <button
-      class="btn btn-outline-primary mt-2 mb-5 mx-auto btn-block w-25 d-block"
-    >
-      加载更多
-    </button>
+    <More @on-loading-more="handleMore"></More>
   </div>
 </template>
 
@@ -25,14 +21,21 @@
 import ColumnList from "@/components/ColumnList.vue";
 import { GlobalDataProps } from "@/types/interface";
 import { useStore } from "vuex";
-import { onMounted, computed } from "vue";
+import { onMounted, computed, ref } from "vue";
+import More from "@/components/More.vue";
 
 // 专栏信息
 const store = useStore<GlobalDataProps>();
 const columnData = computed(() => store.getters.getColumns);
-
+const currentPage = ref<number>(1);
+const pageSize = ref<number>(6);
 onMounted(() => {
-  store.dispatch("getColumnList");
+  store.dispatch("getColumnList", { currentPage:currentPage.value, pageSize:pageSize.value });
 });
+
+// 点击加载更多专栏信息
+const handleMore = (data:any)=>{
+  console.log(data)
+}
 </script>
 <style scoped lang="less"></style>

@@ -72,7 +72,6 @@ const validateInput = () => {
 };
 
 onMounted(() => {
-  console.log("input");
   // 触发事件
   emitter.emit("form-login", validateInput);
 });

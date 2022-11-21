@@ -14,6 +14,7 @@
       </div>
     </div>
     <PostList :list="posts"></PostList>
+    <More></More>
   </div>
 </template>
 
@@ -23,6 +24,7 @@ import { GlobalDataProps } from "@/types/interface";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import PostList from "@/components/PostList.vue";
+import More from "@/components/More.vue";
 const store = useStore<GlobalDataProps>();
 const route = useRoute();
 const currentId = ref(route.params.id);
