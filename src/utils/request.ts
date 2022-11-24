@@ -34,10 +34,10 @@ instance.interceptors.response.use(
     return res.data;
   },
   (err) => {
-    const { error } = err.response.data;
-    store.commit("SET_ERROR_MESSAGE", { status: true, message: error });
     // 设置loading为false
     store.commit("SET_LOADING", false);
+    const { error } = err.response.data;
+    store.commit("SET_ERROR_MESSAGE", { status: true, message: error });
     return Promise.reject(error);
   }
 );

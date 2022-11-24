@@ -20,16 +20,21 @@
 <script setup lang="ts">
 import "bootstrap/dist/css/bootstrap.min.css";
 import GlobalHeader from "./components/GlobalHeader.vue";
-import { UserProps } from "@/types/interface";
+import { GlobalDataProps } from "@/types/interface";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import Loading from "./components/Loading.vue";
 
-const userData: UserProps = {
-  isLogin: false,
-};
-const store = useStore()
-const isLoading = computed(()=>store.state.isLoading)
+const store = useStore<GlobalDataProps>();
+
+const userData = computed(() => store.state.user);
+const isLoading = computed(() => store.state.isLoading);
+
+onMounted(() => {
+  if (localStorage.getItem("token")) {
+    store.dispatch("getCurrentUserInfo");
+  }
+});
 </script>
 
 <style scoped></style>

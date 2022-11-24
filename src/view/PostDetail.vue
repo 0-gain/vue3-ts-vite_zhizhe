@@ -14,7 +14,7 @@
           <div class="user-profile-component" v-if="postDetail.author">
             <div class="d-flex align-items-center">
               <img
-                :src="postDetail.author?.avatar?.url"
+                :src="postDetail.author?.avatar?.url || defaultImg"
                 alt=""
                 class="rounded-circle img-thumbnail"
                 style="width: 50px; height: 50px"
@@ -28,9 +28,22 @@
             </div>
           </div>
         </div>
-        <span class="text-muted col text-right font-italic"
-          >发表于：{{ postDetail.createdAt }}</span
-        >
+
+        <div class="col">
+          <span class="text-muted col text-right font-italic"
+            >发表于：{{ postDetail.createdAt }}</span
+          >
+          <span v-if="postDetail.author?._id === store.state.user._id">
+            <router-link
+              :to="{ path: '/createPost', query: { id: route.params.id } }"
+              style="display: inline-block; margin: 0 10px"
+              class="text-muted"
+              >编辑</router-link
+            >
+
+            <router-link to="" class="text-muted">删除</router-link>
+          </span>
+        </div>
       </div>
       <div v-html="handleContent"></div>
       <div class="btn-group mt-5"></div>
@@ -43,6 +56,8 @@ import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { GlobalDataProps } from "@/types/interface";
+import { marked } from "marked";
+import defaultImg from "@/assets/avatar.jpg";
 const store = useStore<GlobalDataProps>();
 const route = useRoute();
 const currentId = ref(route.params.id);
@@ -54,8 +69,8 @@ onMounted(() => {
 });
 const handleContent = computed(() => {
   if (postDetail.value && postDetail.value.content) {
-    const { content } = postDetail.value;
-    return content;
+    const { isHTML, content } = postDetail.value;
+    return isHTML ? content : marked.parse(content);
   } else {
     return "";
   }

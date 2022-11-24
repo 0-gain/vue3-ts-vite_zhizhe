@@ -1,12 +1,12 @@
 import { createStore } from "vuex";
 import { GlobalDataProps } from "@/types/interface";
 import { reqColumnList, reqColumnDetailInfo } from "@/api/column";
-import { reqPostList, reqPostDetail } from "@/api/post";
-import { reqUserLogin, reqCurrentUserInfo } from "@/api/user";
+import { reqPostList, reqPostDetail, reqCreatePost } from "@/api/post";
+import { reqUserLogin, reqCurrentUserInfo, reqRegisterUser } from "@/api/user";
 import { objToArr, arrToObj } from "@/utils/helper";
 const store = createStore<GlobalDataProps>({
   state: {
-    token: "",
+    token: localStorage.getItem("token") || "",
     columns: { data: {}, currentPage: 0, total: 0 },
     posts: { data: {} },
     isLoading: false,
@@ -48,14 +48,25 @@ const store = createStore<GlobalDataProps>({
     // 设置token
     SET_TOKEN(state, token) {
       state.token = token;
+      // 持久化token
+      localStorage.setItem("token", token);
     },
     // 设置用户信息
     SET_USER_INFO(state, info) {
-      state.user = info;
+      state.user = {
+        isLogin: true,
+        ...info,
+      };
     },
     // 设置错误信息
     SET_ERROR_MESSAGE(state, error) {
       state.error = error;
+    },
+    // 退出登录
+    SET_LOGIN_OUT(state) {
+      state.token = "";
+      state.user = { isLogin: false };
+      localStorage.removeItem("token");
     },
   },
   actions: {
@@ -102,11 +113,23 @@ const store = createStore<GlobalDataProps>({
       commit("SET_USER_INFO", res.data);
     },
     // 用户登录并获取当前用户信息
-    LoginAndGetUserInfo({ dispatch },payload) {
-      return dispatch("getUserLogin",payload).then(() => {
+    LoginAndGetUserInfo({ dispatch }, payload) {
+      return dispatch("getUserLogin", payload).then(() => {
         return dispatch("getCurrentUserInfo");
       });
     },
+
+    // 注册新用户
+    async getRegisterUser({ commit }, payload) {
+      const res = await reqRegisterUser(payload);
+      console.log(res);
+    },
+
+    // 新建文章
+    async getCreatePost({ commit }, payload) {
+      const res = await reqCreatePost(payload);
+      return res
+    }
   },
   getters: {
     getColumns: (state) => {

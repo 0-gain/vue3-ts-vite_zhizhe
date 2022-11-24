@@ -3,7 +3,7 @@
     <div class="column-info row mb-4 border-bottom pb-4 align-items-center" v-if="column">
       <div class="col-3 text-center">
         <img
-          :src="column.avatar?.url"
+          :src="column.avatar?.url || imgDefault"
           :alt="column.title"
           class="rounded-circle border w-100"
         />
@@ -25,6 +25,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import PostList from "@/components/PostList.vue";
 import More from "@/components/More.vue";
+import imgDefault from '@/assets/column.jpg'
 const store = useStore<GlobalDataProps>();
 const route = useRoute();
 const currentId = ref(route.params.id);

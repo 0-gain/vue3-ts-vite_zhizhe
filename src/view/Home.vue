@@ -30,12 +30,20 @@ const columnData = computed(() => store.getters.getColumns);
 const currentPage = ref<number>(1);
 const pageSize = ref<number>(6);
 onMounted(() => {
-  store.dispatch("getColumnList", { currentPage:currentPage.value, pageSize:pageSize.value });
+  store.dispatch("getColumnList", {
+    currentPage: currentPage.value,
+    pageSize: pageSize.value,
+  });
 });
 
 // 点击加载更多专栏信息
-const handleMore = (data:any)=>{
-  console.log(data)
-}
+const handleMore = () => {
+  currentPage.value++;
+  pageSize.value++;
+  store.dispatch("getColumnList", {
+    currentPage: currentPage.value,
+    pageSize: pageSize.value,
+  });
+};
 </script>
 <style scoped lang="less"></style>

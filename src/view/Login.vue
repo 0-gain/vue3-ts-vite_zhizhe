@@ -7,6 +7,7 @@
         <ValidateInput
           :rules="emailRules"
           type="text"
+          placeholder="请输入邮箱地址"
           v-model="emailVal"
         ></ValidateInput>
       </div>
@@ -15,6 +16,7 @@
         <ValidateInput
           :rules="passwordRules"
           type="password"
+          placeholder="请输入密码"
           v-model="password"
         ></ValidateInput>
       </div>
@@ -33,6 +35,7 @@ import ValidateInput from "@/components/validateInput.vue";
 import Message from "@/components/Message";
 import { RulesProp } from "@/types/interface";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { ref } from "vue";
 
 const emailVal = ref("");
@@ -45,11 +48,12 @@ const password = ref("");
 // 密码验证规则
 const passwordRules: RulesProp[] = [
   { type: "required", message: "密码不能为空" },
-  { type: "password", message: "密码输入格式不正确" },
+  { type: "password", message: "密码长度需要在6-16位之间" },
 ];
 
 // 提交表单
 const store = useStore();
+const router = useRouter()
 const onSubmitForm = (validate: boolean) => {
   if (!validate) {
     return;
@@ -62,6 +66,9 @@ const onSubmitForm = (validate: boolean) => {
     .dispatch("LoginAndGetUserInfo", payload)
     .then(() => {
       Message({ type: "success", message: "登录成功 2秒后跳转首页" });
+      setTimeout(()=>{
+        router.push('/')
+      },2000)
     })
     .catch((e) => {
       console.log(e, "e");

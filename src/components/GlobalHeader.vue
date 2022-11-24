@@ -11,16 +11,20 @@
           >
         </li>
         <li class="list-inline-item">
-          <a href="#" class="btn btn-outline-light my-2">注册</a>
+          <router-link
+            :to="{ name: 'signup' }"
+            class="btn btn-outline-light my-2"
+            >注册</router-link
+          >
         </li>
       </ul>
       <ul v-else class="list-inline mb-0">
         <li class="list-inline-item">
-          <Dropdown :title="user.name ?? ''">
-            <DropdownItem>新建文章</DropdownItem>
-            <DropdownItem>我的专栏</DropdownItem>
+          <Dropdown :title="user.nickName ?? ''">
+            <DropdownItem pathName="createPost">新建文章</DropdownItem>
+            <DropdownItem @click="goSelfColumn">我的专栏</DropdownItem>
             <DropdownItem disabled>编辑资料</DropdownItem>
-            <DropdownItem>退出登录</DropdownItem>
+            <DropdownItem @click="loginOut">退出登录</DropdownItem>
           </Dropdown>
         </li>
       </ul>
@@ -29,19 +33,34 @@
 </template>
 
 <script setup lang="ts">
-import { UserProps } from "@/types/interface";
+import { UserProps, GlobalDataProps } from "@/types/interface";
 import { PropType } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import Dropdown from "./Dropdown.vue";
 import DropdownItem from "./DropdownItem.vue";
+import Message from "./Message";
 defineProps({
   user: {
     type: Object as PropType<UserProps>,
     required: true,
   },
 });
+const store = useStore<GlobalDataProps>();
+// 退出登录
+const loginOut = () => {
+  store.commit("SET_LOGIN_OUT");
+  Message({ type: "success", message: "退出登录成功" });
+};
+
+// 跳转到自己得专栏
+const router = useRouter();
+const goSelfColumn = () => {
+  router.push({ name: "column", params: { id: store.state.user.column } });
+};
 </script>
 <style scoped>
-.navbar-brand{
+.navbar-brand {
   color: #fff;
 }
 </style>

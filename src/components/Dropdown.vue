@@ -36,6 +36,7 @@ isOpen.value = isClickOutside.value
 
 watch(isClickOutside,(newVal)=>{
   isOpen.value = newVal
+  
 })
 </script>
 <style scoped lang="less"></style>

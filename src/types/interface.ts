@@ -9,8 +9,9 @@ export interface UserProps {
 }
 
 export interface RulesProp {
-  type: "required" | "email" | "password";
+  type: "required" | "email" | "password" | "nickName" | "custom";
   message: string;
+  validator?: () => boolean;
 }
 
 export interface ImageProps {
@@ -42,3 +43,11 @@ export interface GlobalDataProps {
 }
 
 export type MessageType = "primary" | "success" | "danger" | "warning";
+
+export interface CreatePostProps{
+  title:string,
+  content:string,
+  image?:string,
+  column:string,
+  author:string
+}

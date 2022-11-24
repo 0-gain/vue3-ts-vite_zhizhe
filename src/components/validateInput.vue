@@ -3,9 +3,8 @@
     <input
       class="form-control"
       v-bind="$attrs"
-      :value="modelValue"
+      v-model="inputData.val"
       :class="{ 'is-invalid': inputData.error }"
-      @input="updateVal"
       @blur="validateInput"
     />
     <span
@@ -18,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, reactive, onMounted } from "vue";
+import { PropType, reactive, onMounted, computed } from "vue";
 import { RulesProp } from "@/types/interface";
 import { emitter } from "@/emitter";
 
@@ -27,20 +26,20 @@ const emailReg =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 // 密码验证规则
-const passwordReg = /^\w{6,24}$/;
+const passwordReg = /^\w{6,16}$/;
 const props = defineProps({
   modelValue: String,
   rules: Array as PropType<RulesProp[]>,
 });
-const emit = defineEmits(["update:modelValue"]);
-const updateVal = (e: Event) => {
-  const targetValue = (e.target as HTMLInputElement).value;
-  inputData.val = targetValue;
-  emit("update:modelValue", targetValue);
-};
+const emit = defineEmits(["update:modelValue", "on-isSame"]);
 
 const inputData = reactive({
-  val: "",
+  val: computed({
+    get: () => props.modelValue || "",
+    set: (val) => {
+      emit("update:modelValue", val);
+    },
+  }),
   error: false,
   message: "",
 });
@@ -60,6 +59,9 @@ const validateInput = () => {
         case "password":
           passed = passwordReg.test(inputData.val);
           break;
+        case "custom":
+          passed = rule.validator?.() || false;
+          break;
         default:
           break;
       }
@@ -68,7 +70,7 @@ const validateInput = () => {
     inputData.error = !allPassed;
     return allPassed;
   }
-  return false;
+  return true;
 };
 
 onMounted(() => {

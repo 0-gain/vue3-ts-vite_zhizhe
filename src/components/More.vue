@@ -13,7 +13,7 @@
 const emit = defineEmits(['on-loading-more'])
 
 const clickMore = ()=>{
-  emit('on-loading-more',123)
+  emit('on-loading-more')
 }
 </script>
 <style scoped></style>

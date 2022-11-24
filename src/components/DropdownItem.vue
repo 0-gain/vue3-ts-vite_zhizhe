@@ -1,8 +1,6 @@
 <template>
   <li class="dropdown-option" :class="{ 'is-disabled': disabled }">
-    <a class="dropdown-item" href="#">
-      <slot></slot>
-    </a>
+    <router-link :to="{name:pathName}" class="dropdown-item"><slot></slot></router-link>
   </li>
 </template>
 
@@ -12,6 +10,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  pathName:{
+    type:String,
+    default:''
+  }
 });
 </script>
 <style scoped>

@@ -6,7 +6,7 @@
           <router-link :to="{name:'posts',params:{id:post._id}}">{{ post.title }}</router-link>
         </h4>
         <div class="row my-3 align-items-center">
-          <div class="col-4">
+          <div class="col-4" v-if="post.image?.url">
             <img
               :src="post.image?.url"
               class="rounded-lg w-100"
