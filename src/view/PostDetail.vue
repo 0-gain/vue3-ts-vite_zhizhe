@@ -41,7 +41,12 @@
               >编辑</router-link
             >
 
-            <router-link to="" class="text-muted">删除</router-link>
+            <a
+              style="cursor: pointer"
+              @click="handleDeletePost"
+              class="text-muted"
+              >删除</a
+            >
           </span>
         </div>
       </div>
@@ -54,12 +59,14 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { GlobalDataProps } from "@/types/interface";
 import { marked } from "marked";
 import defaultImg from "@/assets/avatar.jpg";
+import Message from "@/components/Message";
 const store = useStore<GlobalDataProps>();
 const route = useRoute();
+const router = useRouter();
 const currentId = ref(route.params.id);
 const postDetail = computed(() => {
   return store.getters.getPostDetailById(currentId.value);
@@ -75,6 +82,15 @@ const handleContent = computed(() => {
     return "";
   }
 });
+// 删除文章
+const handleDeletePost = () => {
+  if (confirm("确定删除当前文章吗?")) {
+    store.dispatch("getDeletePost", route.params.id).then(() => {
+      Message({ type: "success", message: "删除成功" });
+      router.replace({ name: "column", params: { id: store.state.user.column } });
+    });
+  }
+};
 </script>
 <style scoped>
 .post-detail-page {

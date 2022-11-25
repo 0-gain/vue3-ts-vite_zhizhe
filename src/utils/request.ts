@@ -11,14 +11,14 @@ instance.interceptors.request.use(
     store.commit("SET_ERROR_MESSAGE", { status: false, message: "" });
     // 设置loading为true
     store.commit("SET_LOADING", true);
-    // 添加token
-    const token = store.state.token;
-    if (token) {
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token}`,
-      };
-    }
+    // // 添加token
+    // const token = store.state.token;
+    // if (token) {
+    //   config.headers = {
+    //     ...config.headers,
+    //     Authorization: `Bearer ${token}`,
+    //   };
+    // }
     return config;
   },
   (err) => {

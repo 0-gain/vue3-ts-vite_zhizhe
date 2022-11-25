@@ -15,3 +15,6 @@ export const reqCreatePost = (data: CreatePostProps) =>
 // 更新单个文章
 export const reqUpdatePost = (id: string, data: object) =>
   request.patch(`posts/${id}`, data);
+
+// 删除单个文章
+export const reqDeletePost = (id:string) => request.delete(`posts/${id}`);

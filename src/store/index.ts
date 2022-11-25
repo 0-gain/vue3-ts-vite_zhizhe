@@ -1,14 +1,19 @@
 import { createStore } from "vuex";
 import { GlobalDataProps } from "@/types/interface";
 import { reqColumnList, reqColumnDetailInfo } from "@/api/column";
-import { reqPostList, reqPostDetail, reqCreatePost } from "@/api/post";
+import {
+  reqPostList,
+  reqPostDetail,
+  reqCreatePost,
+  reqDeletePost,
+} from "@/api/post";
 import { reqUserLogin, reqCurrentUserInfo, reqRegisterUser } from "@/api/user";
 import { objToArr, arrToObj } from "@/utils/helper";
 const store = createStore<GlobalDataProps>({
   state: {
     token: localStorage.getItem("token") || "",
     columns: { data: {}, currentPage: 0, total: 0 },
-    posts: { data: {} },
+    posts: { data: {}, total: 0 },
     isLoading: false,
     user: { isLogin: false },
     error: { status: false, message: "" },
@@ -35,6 +40,7 @@ const store = createStore<GlobalDataProps>({
           ...state.posts.data,
           ...arrToObj(rawData.data.list),
         },
+        total: rawData.data.count,
       };
     },
     // 设置Loading状态
@@ -68,6 +74,10 @@ const store = createStore<GlobalDataProps>({
       state.user = { isLogin: false };
       localStorage.removeItem("token");
     },
+    // 删除文章
+    SET_DELETE_POST(state, rawData) {
+      delete state.posts.data[rawData.data._id];
+    },
   },
   actions: {
     // 获取专栏信息
@@ -87,7 +97,7 @@ const store = createStore<GlobalDataProps>({
     },
     // 获取专栏文章
     async getPostsList({ commit }, params = {}) {
-      const { id, size = 5, page = 1 } = params;
+      const { id, pageSize: size = 5, currentPage: page = 1 } = params;
       const res = await reqPostList(id, page, size);
       commit("SET_POSTS_LIST", res);
     },
@@ -119,7 +129,7 @@ const store = createStore<GlobalDataProps>({
       });
     },
 
-    // 注册新用户
+    // 注册新用户(接口没用)
     async getRegisterUser({ commit }, payload) {
       const res = await reqRegisterUser(payload);
       console.log(res);
@@ -128,8 +138,13 @@ const store = createStore<GlobalDataProps>({
     // 新建文章
     async getCreatePost({ commit }, payload) {
       const res = await reqCreatePost(payload);
-      return res
-    }
+      return res;
+    },
+    // 删除文章
+    async getDeletePost({ commit }, id) {
+      const res = await reqDeletePost(id);
+      commit("SET_DELETE_POST", res);
+    },
   },
   getters: {
     getColumns: (state) => {

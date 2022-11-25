@@ -1,6 +1,9 @@
 <template>
   <div class="column-detail-page" style="width: 690px; margin: 0 auto">
-    <div class="column-info row mb-4 border-bottom pb-4 align-items-center" v-if="column">
+    <div
+      class="column-info row mb-4 border-bottom pb-4 align-items-center"
+      v-if="column"
+    >
       <div class="col-3 text-center">
         <img
           :src="column.avatar?.url || imgDefault"
@@ -14,35 +17,35 @@
       </div>
     </div>
     <PostList :list="posts"></PostList>
-    <More></More>
+    <More v-if="!isLastPage()" @on-loading-more="loadMore"></More>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref, watch } from "vue";
+import { onMounted, computed, ref } from "vue";
 import { GlobalDataProps } from "@/types/interface";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import PostList from "@/components/PostList.vue";
 import More from "@/components/More.vue";
-import imgDefault from '@/assets/column.jpg'
+import imgDefault from "@/assets/column.jpg";
+import useLoadMore from "@/hooks/useLoadMore";
 const store = useStore<GlobalDataProps>();
 const route = useRoute();
-const currentId = ref(route.params.id);
+const currentId = ref(route.params.id as string);
 onMounted(() => {
   store.dispatch("getColumnDetailInfo", currentId.value);
   store.dispatch("getPostsList", { id: currentId.value });
 });
 
-// 检测变化
-watch(
-  () => route.params,
-  (newVal) => {
-    console.log(newVal);
-  }
-);
 const column = computed(() => store.getters.getColumById(currentId.value));
-
 const posts = computed(() => store.getters.getPostsById(currentId.value));
+const total = computed(() => store.state.posts.total);
+const { loadMore, isLastPage } = useLoadMore("getPostsList", total, {
+  id: currentId.value,
+  currentPage: 2,
+  pageSize: 5,
+});
+
 </script>
 <style scoped></style>

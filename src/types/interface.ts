@@ -36,7 +36,7 @@ export interface GlobalError {
 export interface GlobalDataProps {
   token: string;
   columns: { data: ListProps<ColumnProps>; currentPage: number; total: number };
-  posts: { data: ListProps<ColumnProps> };
+  posts: { data: ListProps<ColumnProps>; total: number };
   isLoading: boolean;
   user: UserProps;
   error: GlobalError;
@@ -44,10 +44,10 @@ export interface GlobalDataProps {
 
 export type MessageType = "primary" | "success" | "danger" | "warning";
 
-export interface CreatePostProps{
-  title:string,
-  content:string,
-  image?:string,
-  column:string,
-  author:string
+export interface CreatePostProps {
+  title: string;
+  content: string;
+  image?: string;
+  column: string;
+  author: string;
 }
