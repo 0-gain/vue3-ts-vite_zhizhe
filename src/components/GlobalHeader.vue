@@ -51,6 +51,7 @@ const store = useStore<GlobalDataProps>();
 const loginOut = () => {
   store.commit("SET_LOGIN_OUT");
   Message({ type: "success", message: "退出登录成功" });
+  router.replace('/');
 };
 
 // 跳转到自己得专栏

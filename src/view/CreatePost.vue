@@ -150,7 +150,7 @@ const onSubmitPost = (flag: boolean) => {
     store.dispatch("getCreatePost", payload).then(() => {
       Message({ type: "success", message: "新建文章成功，2秒后跳转至专栏" });
       setTimeout(() => {
-        router.push({ name: "column", params: { id: payload.column } });
+        router.replace({ name: "column", params: { id: payload.column } });
       }, 2000);
     });
   }

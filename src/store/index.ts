@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import { createStore,Commit } from "vuex";
 import { GlobalDataProps } from "@/types/interface";
 import { reqColumnList, reqColumnDetailInfo } from "@/api/column";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@/api/post";
 import { reqUserLogin, reqCurrentUserInfo, reqRegisterUser } from "@/api/user";
 import { objToArr, arrToObj } from "@/utils/helper";
+
 const store = createStore<GlobalDataProps>({
   state: {
     token: localStorage.getItem("token") || "",
@@ -78,6 +79,10 @@ const store = createStore<GlobalDataProps>({
     SET_DELETE_POST(state, rawData) {
       delete state.posts.data[rawData.data._id];
     },
+    // 新建文章
+    SET_CREATE_POST(state,newPost){
+      state.posts.data[newPost._id] = newPost
+    }
   },
   actions: {
     // 获取专栏信息
@@ -138,7 +143,7 @@ const store = createStore<GlobalDataProps>({
     // 新建文章
     async getCreatePost({ commit }, payload) {
       const res = await reqCreatePost(payload);
-      return res;
+      commit('SET_CREATE_POST',res.data)
     },
     // 删除文章
     async getDeletePost({ commit }, id) {
