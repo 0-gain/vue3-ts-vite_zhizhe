@@ -21,8 +21,12 @@
       <ul v-else class="list-inline mb-0">
         <li class="list-inline-item">
           <Dropdown :title="user.nickName ?? ''">
-            <DropdownItem pathName="createPost">新建文章</DropdownItem>
-            <DropdownItem @click="goSelfColumn">我的专栏</DropdownItem>
+            <DropdownItem>
+              <router-link to="/createPost">新建文章</router-link>
+            </DropdownItem>
+            <DropdownItem>
+            <router-link :to="{name:'column',params: { id: user.column }}">我的专栏</router-link>
+            </DropdownItem>
             <DropdownItem disabled>编辑资料</DropdownItem>
             <DropdownItem @click="loginOut">退出登录</DropdownItem>
           </Dropdown>
@@ -47,6 +51,7 @@ defineProps({
   },
 });
 const store = useStore<GlobalDataProps>();
+const router = useRouter();
 // 退出登录
 const loginOut = () => {
   store.commit("SET_LOGIN_OUT");
@@ -54,11 +59,7 @@ const loginOut = () => {
   router.replace('/');
 };
 
-// 跳转到自己得专栏
-const router = useRouter();
-const goSelfColumn = () => {
-  router.push({ name: "column", params: { id: store.state.user.column } });
-};
+
 </script>
 <style scoped>
 .navbar-brand {

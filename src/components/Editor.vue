@@ -8,10 +8,16 @@
 import EasyMDE from "easymde";
 import { ref, onMounted, watch } from "vue";
 
-const props = defineProps({
-  mdValue: String,
-});
-const emit = defineEmits(["update:mdValue", "on-blur"]);
+// 类型，属性以及事件
+interface EditorProps {
+  mdValue?: string;
+}
+interface EditorEvents {
+  (type: "update:mdValue", value: string): void;
+  (type: "on-blur"): void;
+}
+const props = defineProps<EditorProps>();
+const emit = defineEmits<EditorEvents>();
 const textArea = ref<null | HTMLTextAreaElement>(null);
 const initialContent = ref(props.mdValue || "");
 
